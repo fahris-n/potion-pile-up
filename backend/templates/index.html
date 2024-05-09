@@ -1,0 +1,31 @@
+{% extends "layout.html" %}
+
+{% block title %}
+    Index
+{% endblock %}
+
+{% block main %}
+
+<container> 
+    <div class="homepage-text">
+        <p>Welcome to Potion Pile Up, a JS game in a web app made by my dumbass who doesn't know how anything works but trys none the less</p>
+        <p>[Put the shit here]</p>
+    </div>
+</container>
+
+    <!-- Embed audio file-->
+    <audio id="bg-music-login" loop>
+        <source src="{{ url_for('static', filename='media/wizard_game_music.mp3') }}" type="audio/mpeg">
+    </audio>
+
+
+    <!-- Begin playing music when content is loaded -->
+    <script>
+        document.addEventListener("DOMContentLoaded", function() {
+            var audio = document.getElementById('bg-music-login');
+            audio.volume = 0.05;
+            audio.play();
+        });
+    </script>
+
+{% endblock %}

@@ -1,0 +1,29 @@
+Get VS Code on mac setup for development:   DONE
+    - Make project folder
+    - Get appropriate folders for backend/frontend
+    - Setup venv
+    - Setup Git 
+
+Get MySQL db setup and configured:  MySql Installed (i think) / need to figure the rest out. shit sucks major booty 
+    - I have no idea how to do this
+    - Needs to allow for registration of users and also store global high scores
+
+Get bare bones of project setup:
+    - background
+    - templates
+    - login/register/logout screens 
+
+Come up with game idea and design layout:
+    - Going to be a javascript game
+    - Get idea for game ironed out, keep it simple and repetative, game state ends only when user is hit
+    - Design game art/sprites
+
+Find a way to host online:
+    - I have no idea how to do this
+    - Must be cheap or free
+    - Drum up users online, want as many players as possible so that it looks good on resume
+
+Make open source on GitHub:
+    - So we can put it on as a sweet, sweet project for the resume 
+
+

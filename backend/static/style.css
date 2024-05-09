@@ -1,0 +1,83 @@
+.nav-item {
+    padding: 10px;
+}
+
+.nav-link {
+    font-size: 22px;
+    color: white;
+}
+
+.nav-link.orange {
+    font-size: 22px;
+    color: orange;
+}
+
+.bg {
+    /*
+    Adapted from Atle Mo and Lea Verou
+    */
+
+    background:
+    radial-gradient(black 15%, transparent 16%) 0 0,
+    radial-gradient(black 15%, transparent 16%) 8px 8px,
+    radial-gradient(rgba(255,255,255,.1) 15%, transparent 20%) 0 1px,
+    radial-gradient(rgba(255,255,255,.1) 15%, transparent 20%) 8px 9px;
+    background-color:#282828;
+    background-size:16px 16px;
+}
+
+
+.login-form {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+}
+
+
+.register-form {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+}
+
+.acknowledgements {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+    padding: 10px;
+}
+
+.acknowledgements-content {
+    max-width: 500px;
+    text-align: center;
+    color: white;
+    text-shadow: 2px 2px 4px black;
+    font-size: 22px;
+}
+
+.flashes {
+    color: white;
+    list-style: none;
+    position: fixed;
+    bottom: 25%;
+    left: 50%;
+    transform: translateX(-50%);
+    z-index: 1000;
+    background-color: rgba(43, 73, 133, 0.8);
+    padding: 10px;
+    border-radius: 5px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+}
+
+.homepage-text {
+    text-align: center;
+    font-size: 22px;
+    color: rgb(255, 166, 0);
+}
+
