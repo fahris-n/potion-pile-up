@@ -5,7 +5,7 @@
 __pycache__
 
 # Ignore session data
-/*_session/
+flask_session/
 
 # Ignore any compiled Python files
 *.pyc
