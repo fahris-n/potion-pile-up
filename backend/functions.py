@@ -26,25 +26,17 @@ def is_profane(username, bad_words):
 
 # Create username checker function
 def is_username_valid(username):
+    pattern = r'[!@#$%^&*(),.?":{}|<>-]'
     if len(username) > 18:
         return False
     if ' ' in username:
         return False 
-    if r'[!@#$%^&*(),.?":{}|<>-]' in username:
+    if re.search(pattern, username):
         return False
   
     return True
 
 # Create password checker function
 def is_valid_password(password):
-    if len(password) < 8 or len(password) > 20:
-        return False
-    
-    # Define regular expression pattern
-    special_char = r'[!@#$%^&*(),.?":{}|<>]'
-
-    # Check if password contains at least one of the special characters from the pattern
-    if not re.search(special_char, password):
-        return False
-    
-    return True
+    pattern = r"^(?=.{8,20}$)(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*#?&]).*"
+    return bool(re.match(pattern, password))

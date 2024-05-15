@@ -6,12 +6,17 @@
 
 {% block main %}
 
-<container> 
-    <div class="homepage-text">
-        <p>Welcome to Potion Pile Up, a JS game in a web app made by my dumbass who doesn't know how anything works but trys none the less</p>
-        <p>[Put the shit here]</p>
+<body>
+    <div class="canvas-container">
+        <canvas id="canvas" width="600" height="800" style="border:4px solid #ffffff;">
+        </canvas>
     </div>
-</container>
+    <div class="tutorial-text">
+        <p>CONTROLS</p>
+        <p>A/D: Move left/right</p>
+    </div>
+    <script src="{{ url_for('static', filename='game.js') }}"></script>
+</body>
 
     <!-- Embed audio file-->
     <audio id="bg-music-login" loop>

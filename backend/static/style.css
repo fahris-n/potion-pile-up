@@ -12,11 +12,15 @@
     color: orange;
 }
 
+.navbar-toggler {
+    color: white;
+    background-color: orange;
+}
+
 .bg {
     /*
     Adapted from Atle Mo and Lea Verou
     */
-
     background:
     radial-gradient(black 15%, transparent 16%) 0 0,
     radial-gradient(black 15%, transparent 16%) 8px 8px,
@@ -26,15 +30,39 @@
     background-size:16px 16px;
 }
 
+.container {
+    display: flex;
+    flex-direction: column;
+}
 
-.login-form {
+.login-text {
+    color: orange;
+    font-size: 28px;
+    text-align: center; 
+    padding-top: 100px;
+    padding-bottom: 100px;
+}
+
+/* .login-form {
+    float: left;
     display: flex;
     flex-direction: column;
     justify-content: center;
     align-items: center;
     height: 100vh;
+    width: 50%;
 }
 
+.login-text-container {
+    display: flex;
+}
+
+.login-text {
+    color: orange;
+    font-size: 32px;
+    text-align: center;
+
+} */
 
 .register-form {
     display: flex;
@@ -61,6 +89,12 @@
     font-size: 22px;
 }
 
+.center {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
 .flashes {
     color: white;
     list-style: none;
@@ -75,9 +109,45 @@
     box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
 }
 
-.homepage-text {
+.tutorial-text {
+    position: absolute;
+    padding-right: 8px;
+    top: 20;
+    left: calc(70% + 10px);
     text-align: center;
     font-size: 22px;
     color: rgb(255, 166, 0);
+    padding-top: 8px;
 }
 
+.canvas-container {
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    margin: auto;
+    width: 600px;
+    height: 800px; 
+    padding-top: 8px;
+}
+
+
+@media (max-width: 1480px) {
+    .canvas-container {
+        position: relative;
+    }
+    .tutorial-text {
+        left: 0;
+        right: 0;
+        position: relative;
+        top: 10px;
+    }
+
+    .login-text {
+        left: 0;
+        right: 0;
+        position: relative;
+        top: 10px;
+    }
+}

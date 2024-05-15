@@ -1,11 +1,11 @@
 # Ignore venv folder
-.venv/
+potion_pile_up/backend/.venv/
 
 # Ignore pycache
-backend/__pycache__/
+potion_pile_up/backend/__pycache__/
 
 # Ignore session data
-/backend/flask_session/
+potion_pile_up/backend/flask_session/
 
 # Ignore any compiled Python files
 *.pyc
@@ -17,3 +17,6 @@ secret.py
 .vscode/
 .idea/
 .DS_Store
+
+# Ignore list of bad words
+badwords.txt
