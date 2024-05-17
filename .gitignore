@@ -19,7 +19,7 @@ secret.py
 .DS_Store
 
 # Ignore list of bad words
-badwords.txt
+backend/badwords.txt
 
 # Ignore to-do list
 TODO.txt
