@@ -151,3 +151,8 @@
         top: 10px;
     }
 }
+
+.table {
+    border-radius: 8px;
+    overflow: hidden;
+}

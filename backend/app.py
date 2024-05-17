@@ -171,6 +171,22 @@ def acknowledgements():
     return render_template("acknowledgements.html")
 
 
+# Route for admin panel
+@app.route("/admin", methods=["GET"])
+@login_required
+def admin():
+    if session["user_id"] == 1:
+        # Query all usernames from users table
+        usernames = users.query.with_entities(users.username).all()
+        usernames_list = [username[0] for username in usernames]
+        total_users = len(usernames_list)
+        
+        return render_template("admin.html", usernames_list=usernames_list, total_users=total_users)
+    else:
+        flash("Admin permissions not found")
+        return redirect("/")
+
+
 # Run the application in debug mode
 if __name__ == "__main__":
     app.run(debug=True)

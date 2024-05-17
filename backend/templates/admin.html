@@ -1,0 +1,41 @@
+{% extends "layout.html" %}
+
+{% block title %}
+    Admin
+{% endblock %}
+
+{% block main %}
+
+<div class="container mt-4">
+    <table class="table table-striped">
+        <thead>
+            <tr>
+                <th class="text-center">Total Users</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr>
+                <td>{{ total_users }}</td>
+            </tr>
+        </tbody>
+    </table>
+</div>
+
+<div class="container mt-4">
+    <table class="table table-striped">
+        <thead>
+            <tr>
+                <th class="text-center">Users List</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for usernames_list in usernames_list %}
+            <tr>
+                <td>{{ usernames_list }}</td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</div>
+
+{% endblock %}

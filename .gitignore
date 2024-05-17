@@ -21,4 +21,5 @@ secret.py
 # Ignore list of bad words
 badwords.txt
 
+# Ignore to-do list
 TODO.txt
