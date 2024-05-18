@@ -43,27 +43,6 @@
     padding-bottom: 100px;
 }
 
-/* .login-form {
-    float: left;
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-    align-items: center;
-    height: 100vh;
-    width: 50%;
-}
-
-.login-text-container {
-    display: flex;
-}
-
-.login-text {
-    color: orange;
-    font-size: 32px;
-    text-align: center;
-
-} */
-
 .register-form {
     display: flex;
     flex-direction: column;
@@ -131,7 +110,6 @@
     height: 800px; 
     padding-top: 8px;
 }
-
 
 @media (max-width: 1480px) {
     .canvas-container {

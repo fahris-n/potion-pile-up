@@ -14,7 +14,11 @@ from models import db, users, highscores
 app = Flask(__name__)
 
 # Load bad words from file for username validation
-bad_words = load_bad_words('badwords.txt')
+try:
+    bad_words = load_bad_words('badwords.txt')
+except Exception as e:
+    print(f"Error loading bad words: {e}")
+    bad_words = []
 
 # Configure session to use filesystem (instead of signed cookies)
 app.config["SESSION_PERMANENT"] = False
@@ -59,8 +63,6 @@ def index():
 # Route for user login
 @app.route("/login", methods=["GET", "POST"])
 def login():
-    """Log user in"""
-
     if request.method == "POST":
         username = request.form.get("username")
         password = request.form.get("password")
@@ -77,13 +79,16 @@ def login():
             return render_template('login.html')
 
         # Query database for the user
-        user = users.query.filter_by(username=username).first()
+        try:
+            user = users.query.filter_by(username=username).first()
+        except Exception as e:
+            print(f"An error occured while querying the databse: {e}")
+            return render_template("login.html")
 
         # Validate user credentials.
         if not user or not check_password_hash(user.password, password):
             flash('Invalid username or password')
             return render_template('login.html')
-        # Set session user ID and redirect to homepage upon successful login
         else:
             session['user_id'] = user.id
             return redirect("/")
@@ -96,20 +101,16 @@ def login():
 # Route for user logout
 @app.route("/logout")
 def logout():
-    """Log user out"""
-
     # Clear the session to log the user out
     session.clear()
 
-    # Redirect user to login form
+    # Redirect user to logged out form
     return render_template("logout.html")
 
 
 # Route for user registration
 @app.route("/register", methods=["GET", "POST"])
 def register():
-    """Register user"""
-
     if request.method == "POST":
         username = request.form.get('username')
         password = request.form.get('password')
@@ -141,7 +142,12 @@ def register():
             return render_template('register.html')
         
         # Check if username is already taken
-        existing_user = users.query.filter_by(username=username).first()
+        try:
+            existing_user = users.query.filter_by(username=username).first()
+        except Exception as e:
+            flash(f"An error occured while checking for existing username: {e}")
+            return render_template("register.html")
+
         if existing_user:
             flash('Username already in use')
             return render_template('register.html')
@@ -152,9 +158,14 @@ def register():
             return render_template('login.html')
 
         # Create and save the new user to the database
-        new_user = users(username=username, password=generate_password_hash(password))
-        db.session.add(new_user)
-        db.session.commit()
+        try:
+            new_user = users(username=username, password=generate_password_hash(password))
+            db.session.add(new_user)
+            db.session.commit()
+        except Exception as e:
+            db.session.rollback()
+            flash(f"An error occured during registration: {e}")
+            return render_template("register.html")
     
         # Notify user of successful registration
         flash('Registration successful!')
@@ -177,9 +188,13 @@ def acknowledgements():
 def admin():
     if session["user_id"] == 1:
         # Query all usernames from users table
-        usernames = users.query.with_entities(users.username).all()
-        usernames_list = [username[0] for username in usernames]
-        total_users = len(usernames_list)
+        try:
+            usernames = users.query.with_entities(users.username).all()
+            usernames_list = [username[0] for username in usernames]
+            total_users = len(usernames_list)
+        except Exception as e:
+            flash(f"Error occured while fetching user data: {e}")
+            return redirect("/")
         
         return render_template("admin.html", usernames_list=usernames_list, total_users=total_users)
     else:
