@@ -9,12 +9,12 @@
 
 .nav-link.orange {
     font-size: 22px;
-    color: orange;
+    color: #add8e6;;
 }
 
 .navbar-toggler {
     color: white;
-    background-color: orange;
+    background-color: #add8e6;;
 }
 
 .bg {
@@ -36,7 +36,7 @@
 }
 
 .login-text {
-    color: orange;
+    color: #add8e6;;
     font-size: 28px;
     text-align: center; 
     padding-top: 100px;
@@ -95,7 +95,7 @@
     left: calc(70% + 10px);
     text-align: center;
     font-size: 22px;
-    color: rgb(255, 166, 0);
+    color: #add8e6;;
     padding-top: 8px;
 }
 
