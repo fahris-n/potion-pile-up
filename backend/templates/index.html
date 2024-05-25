@@ -7,7 +7,7 @@
 {% block main %}
 
 <body>
-    <div class="canvas-container">
+    <div class="game-container">
         <canvas id="canvas" width="600" height="800" style="border:4px solid #ffffff;">
         </canvas>
     </div>
@@ -23,7 +23,6 @@
     <audio id="bg-music-login" loop>
         <source src="{{ url_for('static', filename='media/wizard_game_music.mp3') }}" type="audio/mpeg">
     </audio>
-
 
     <!-- Begin playing music when content is loaded -->
     <script>
