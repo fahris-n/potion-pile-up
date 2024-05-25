@@ -176,6 +176,12 @@ def register():
         return render_template("register.html", csrf_token=session['csrf_token'])
 
 
+# Route for leaderboard
+@app.route("/leaderboard", methods=["GET"])
+def leaderboard():
+    return render_template("leaderboard.html")
+
+
 # Route for acknowledgements page
 @app.route("/acknowledgements", methods=["GET"])
 def acknowledgements():
