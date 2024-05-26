@@ -21,7 +21,6 @@ def load_bad_words(filename):
 def is_profane(username, bad_words):
     if username.lower() in bad_words:
         return False
-    
     return True
 
 # Create username checker function
@@ -33,7 +32,6 @@ def is_username_valid(username):
         return False 
     if re.search(pattern, username):
         return False
-  
     return True
 
 # Create password checker function
