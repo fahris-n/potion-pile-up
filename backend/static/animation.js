@@ -37,7 +37,7 @@ function animate() {
         spriteWidth,
         spriteHeight
     );
-    y+=1.5;
+    y+=0.1;
     // Reset sprite position at random x if it reaches bottom of screen. A different sprite skin will also be randomly chosen
     if (y > CANVAS_HEIGHT) {
         y = 0;
@@ -47,4 +47,8 @@ function animate() {
     }
     requestAnimationFrame(animate);
 }
-animate();
+
+// Have animation run multiple times at once
+for (var i = 1; i < 20; i++) {
+    animate(i);
+}
