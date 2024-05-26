@@ -10,50 +10,41 @@ const potionSpritesheet = new Image();
 potionSpritesheet.src = 'static/media/potions.png';
 
 const spriteWidth = 16;
-const spriteHeight = 26;
-const spriteCount = 160;
+const spriteHeight = 24;
 
+const spriteSheetCols = 16;
+const spriteSheetRows = 10;
+
+// Initialize x and y positions in spritesheet
+let spriteSheetX = 0;
+let spriteSheetY = 0;
+
+// Initialize x (random) and y position on canvas
 let x = Math.random() * CANVAS_WIDTH;
 let y = 0;
 
-// function getRandomPotionIndex() {
-//     return Math.floor(Math.random() * spriteCount);
-// }
-
-// function animate() {
-//     ctx.clearRect(0, 0, CANVAS_WIDTH, CANVAS_HEIGHT);
-
-//     let x = Math.random() * CANVAS_WIDTH;
-
-//     for (let i = 0; i < 160; i++) {
-//         const potionIndex = getRandomPotionIndex();
-//         const potionX = x + i * 20;
-//         const potionY = i * 30;
-
-//         ctx.drawImage(
-//             potionSpritesheet,
-//             potionIndex * spriteWidth,
-//             0,
-//             spriteWidth,
-//             spriteHeight,
-//             potionX,
-//             potionY,
-//             spriteWidth,
-//             spriteHeight
-//         );
-//     }
-//     requestAnimationFrame(animate);
-// }
-
+// Function to animate the sprite
 function animate() {
     ctx.clearRect(0, 0, CANVAS_WIDTH, CANVAS_HEIGHT);
-    ctx.drawImage(potionSpritesheet, 0, 0, spriteWidth, spriteHeight, x, y, spriteWidth ,spriteHeight);
-    y++;
+    ctx.drawImage(
+        potionSpritesheet, 
+        spriteSheetX * spriteWidth, 
+        spriteSheetY * spriteHeight, 
+        spriteWidth, 
+        spriteHeight, 
+        x, 
+        y, 
+        spriteWidth,
+        spriteHeight
+    );
+    y+=1.5;
+    // Reset sprite position at random x if it reaches bottom of screen. A different sprite skin will also be randomly chosen
     if (y > CANVAS_HEIGHT) {
         y = 0;
         x = Math.random() * CANVAS_WIDTH;
+        spriteSheetX = Math.floor(Math.random() * spriteSheetCols);
+        spriteSheetY = Math.floor(Math.random() * spriteSheetRows); 
     }
     requestAnimationFrame(animate);
 }
-
 animate();

@@ -85,7 +85,6 @@ function animate() {
     let frameY = spriteAnimations[playerState].loc[position].y;
     ctx.drawImage(playerImage, frameX, frameY, spriteWidth, spriteHeight, x, y, 86, 86)
 
-
     gameFrame++;
     requestAnimationFrame(animate);
 };
