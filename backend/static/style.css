@@ -114,8 +114,8 @@
 }
 
 #canvas {
-    background:url(media/background_glacial_mountains.png) no-repeat center center;
-    background-size: cover;
+    background:url(media/background_ppu.png) no-repeat center center;
+    background-size: cover; 
 }
 
 @media (max-width: 1480px) {
