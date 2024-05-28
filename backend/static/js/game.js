@@ -16,7 +16,7 @@ let playerState = "moveLeft";
 let gameFrame = 0;
 const staggerFrames = 12;
 
-// Initialize position and velocity variables
+// Initialize position and velocity variables for player
 let x = 250;
 let y = 715;
 let vxr = 0;
@@ -34,7 +34,7 @@ const animationStates = [
     }
 ];
 
-// Function to create sprite animations
+// Function to create character sprite animations
 function createSpriteAnimations(){
     animationStates.forEach((state, index) => {
         let frames = {
@@ -74,7 +74,7 @@ function setupEventListeners(){
 // Initialize event listeners
 setupEventListeners();
 
-// Animation loop
+// Character animation loop
 function animate() {
     x += vxr;
     x += vxl;
@@ -89,5 +89,15 @@ function animate() {
     requestAnimationFrame(animate);
 };
 
-// Start animation
+// Start character animation
 animate();
+
+// Potion object setup
+const potionSpritesheet = new Image();
+potionSpritesheet.src = 'static/media/potions.png';
+
+const potionWidth = 16;
+const potionHeight = 24;
+
+const spriteSheetCols = 16;
+const spriteSheetRows = 10;

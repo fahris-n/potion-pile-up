@@ -37,7 +37,7 @@ function animate() {
         spriteWidth,
         spriteHeight
     );
-    y+=0.1;
+    y+=0.09;
     // Reset sprite position at random x if it reaches bottom of screen. A different sprite skin will also be randomly chosen
     if (y > CANVAS_HEIGHT) {
         y = 0;
