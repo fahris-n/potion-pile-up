@@ -38,7 +38,7 @@ db.init_app(app)
 # Set secret key for session management and CSRF protection
 app.config['SECRET_KEY'] = SECRET_KEY
 
-# Generate CSRF token before handling each request to prevent CSRF attacks
+# Generate CSRF token in the session before handling each request
 @app.before_request
 def before_request():
     if 'csrf_token' not in session:
@@ -53,7 +53,7 @@ def after_request(response):
     return response
 
 
-# Route for homepage, requires users to be logged in
+# Route for game page. Requires users to be logged in
 @app.route("/")
 @login_required
 def index():
@@ -82,7 +82,7 @@ def login():
         try:
             user = users.query.filter_by(username=username).first()
         except Exception as e:
-            print(f"An error occured while querying the databse: {e}")
+            print(f"An error occured while querying the database: {e}")
             return render_template("login.html")
 
         # Validate user credentials.
