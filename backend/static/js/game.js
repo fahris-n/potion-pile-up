@@ -161,13 +161,15 @@ function initPotions() {
 }
 
 // Initialize game score and game lives
-let gameScore = 0;
+let gameScore = 10;
 let gameLives = 3;
 
 
 // Game animation loop
 function animate() {
     ctx.clearRect(0, 0, CANVAS_WIDTH, CANVAS_HEIGHT);
+
+    var gameOver = false;
 
     // Show score and lives in top right
     ctx.font = "22px Arial";
@@ -191,7 +193,28 @@ function animate() {
         potion.draw();
         potionHitbox = {x: potion.x, y: potion.y, width: potion.width, height: potion.height};
 
-        // Collision detection
+        // // Collision detection with a less efficient method. Testing to see if the game speed increase will work with this
+        // if (playerHitbox.x < potionHitbox.x + potionHitbox.width && 
+        //     playerHitbox.x + playerHitbox.width > potionHitbox.x && 
+        //     playerHitbox.y < potionHitbox.y + potionHitbox.height && 
+        //     playerHitbox.y + playerHitbox.height > potionHitbox.y
+        // ){
+        //     // collision detected
+        //     potion.reset();
+        //     gameScore++;
+        //     console.log("Collision detected: Score updated");
+        //     console.log(gameScore);
+        // } else {
+        //     // no collision
+        //     if (potion.y >= CANVAS_HEIGHT) {
+        //         potion.reset();
+        //         gameLives--;
+        //         console.log("Potion missed: Lost a life");
+        //         console.log(gameLives);
+        //     }
+        // }
+
+        // Collision detection with more efficient method
         if (playerHitbox.x > potionHitbox.x + potionHitbox.width || 
             playerHitbox.x + playerHitbox.width < potionHitbox.x || 
             playerHitbox.y > potionHitbox.y + potionHitbox.height || 
@@ -212,19 +235,30 @@ function animate() {
 
     // This current way of increasing potion fall speed to increase difficulty is clunky and stupid, but it works
     // EDIT: gameLives wont update with this block of code included. Figure out why
-        if (gameScore >= 10) {
-            potion.speed = 3.5;
-        }
-        if (gameScore >= 25) {
-            potion.speed = 5;
-        }
-        if (gameScore >= 50) {
-            potion.speed = 5.5;
-        }
+    // Maybe try increasing game speed by using intervals instead of all this? Idk, will look at later
+        // if (gameScore >= 75) {
+        //     potion.speed = 6.1;
+        // } else if (gameScore >= 50) {
+        //     potion.speed = 5.5;
+        // } else if (gameScore >= 25) {
+        //     potion.speed = 5;
+        // } else if (gameScore >= 10) {
+        //     potion.speed = 3.5;
+        // }
+
+    // Check to make sure lives are greater than zero, if not, game over
+    if (gameLives < 0) {
+        gameOver = true;
+    }
 });
     playerBounds();
     gameFrame++;
-    requestAnimationFrame(animate);
+
+    if (!gameOver) {
+        requestAnimationFrame(animate);
+    } else {
+        console.log("Game Over");
+    }
 };
 
 //TODO
@@ -236,4 +270,5 @@ function animate() {
 // [X] Fix potions spawning on the far edges, making it hard to see them
 // [X] Tighten potion spread 
 // [X] Make is so that user cant move player sprite out of bounds of canvas
-// [ ] Add GAME OVER functionality
+// [X] Add GAME OVER functionality
+// [ ] Make some sort of game over screen that appears, then have the user hit enter to play again
