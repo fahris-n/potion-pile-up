@@ -2,11 +2,15 @@
 const CANVAS_WIDTH = 600;
 const CANVAS_HEIGHT = 800;
 
+const SPAWN_BOUNDARY_LEFT = 10;
+const SPAWN_BOUNDARY_RIGHT = 590;
+
+const PLAYER_BOUNDARY_LEFT = 0;
+const PLAYER_BOUNDARY_RIGHT = 530;
+
 const playerSpriteWidth = 32;
 const playerSpriteHeight = 32;
-
 const staggerFrames = 12;
-
 const potionWidth = 16;
 const potionHeight = 24;
 const potionSpriteSheetCols = 10;
@@ -58,6 +62,17 @@ function createPlayerSpriteAnimations(){
 // Initialize sprite animations
 createPlayerSpriteAnimations();
 
+// Make sure player sprite stays within canvas boundaries
+function playerBounds() {
+    if (xPlayer > PLAYER_BOUNDARY_RIGHT) {
+        xPlayer = PLAYER_BOUNDARY_RIGHT;
+    }
+
+    if (xPlayer < PLAYER_BOUNDARY_LEFT) {
+        xPlayer = PLAYER_BOUNDARY_LEFT;
+    }
+};
+
 // Event listeners for keyboard input for player control
 function setupEventListeners(){
     addEventListener("keydown", function(e){
@@ -108,7 +123,7 @@ class Potion {
     }
 
     reset() {
-        this.x = Math.random() * CANVAS_WIDTH;
+        this.x = Math.floor(Math.random() * (SPAWN_BOUNDARY_RIGHT - SPAWN_BOUNDARY_LEFT) + SPAWN_BOUNDARY_LEFT);
         this.y = -30;
         this.width = 24;
         this.height = 32;
@@ -118,10 +133,6 @@ class Potion {
     }
 
     draw() {
-        // Draw debug rectangle
-        // ctx.strokeStyle = 'red';
-        // this.potionHitbox = ctx.strokeRect(this.x, this.y, this.width, this.height);
-
         ctx.drawImage(
             potionSpritesheet,
             this.spriteX * potionWidth,
@@ -149,20 +160,23 @@ function initPotions() {
     }
 }
 
+// Initialize game score and game lives
+let gameScore = 10;
+let gameLives = 3;
+
+
 // Game animation loop
 function animate() {
     ctx.clearRect(0, 0, CANVAS_WIDTH, CANVAS_HEIGHT);
 
-    // Update player position
+    // Show score and lives in top right
+    ctx.font = "22px Arial";
+    ctx.fillText("Score: " + gameScore, 10, 25);
+    ctx.fillText("Lives: " + gameLives, 10, 50);
+
+    // Update player position velocities for left and right
     xPlayer += vxr;
     xPlayer += vxl;
-
-    // Update and draw potions
-    potions.forEach((potion) => {
-        potion.update();
-        potion.draw();
-        potionHitbox = {x: potion.x, y: potion.y, width: potion.width, height: potion.height};
-    });
 
     // Update and draw character sprite
     let position = Math.floor(gameFrame/staggerFrames) % playerSpriteAnimations[playerState].loc.length;
@@ -171,23 +185,55 @@ function animate() {
     ctx.drawImage(playerImage, frameX, frameY, playerSpriteWidth, playerSpriteHeight, xPlayer, yPlayer, 86, 86)
     playerHitbox = {x: xPlayer + 6, y: yPlayer + 6, width: 75, height: 86};
 
-    // Collision detection
-    if (playerHitbox.x > potionHitbox.x + potionHitbox.width || 
-        playerHitbox.x + playerHitbox.width < potionHitbox.x || 
-        playerHitbox.y > potionHitbox.y + potionHitbox.height || 
-        playerHitbox.y + playerHitbox.height < potionHitbox.y
-    ){
+    // Update and draw potions
+    potions.forEach((potion) => {
+        potion.update();
+        potion.draw();
+        potionHitbox = {x: potion.x, y: potion.y, width: potion.width, height: potion.height};
 
-    } else {
-        console.log("Collision detected");
-    };
+        // Collision detection
+        if (playerHitbox.x > potionHitbox.x + potionHitbox.width || 
+            playerHitbox.x + playerHitbox.width < potionHitbox.x || 
+            playerHitbox.y > potionHitbox.y + potionHitbox.height || 
+            playerHitbox.y + playerHitbox.height < potionHitbox.y
+        ){
+        if (potion.y >= CANVAS_HEIGHT) {
+            gameLives --;
+            potion.reset();
+            console.log("Potion missed: Lost a life");
+            console.log(gameLives);
+        }
+        } else {
+            potion.reset();
+            console.log("Collision detected: Score updated");
+            gameScore ++;
+            console.log(gameScore);
+        };
 
+    // This current way of increasing potion fall speed to increase difficulty is clunky and stupid, but it works
+    // EDIT: gameLives wont update with this block of code included. Figure out why
+        if (gameScore >= 10) {
+            potion.speed = 3.5;
+        }
+        if (gameScore >= 25) {
+            potion.speed = 5;
+        }
+        if (gameScore >= 50) {
+            potion.speed = 5.5;
+        }
+});
+    playerBounds();
     gameFrame++;
     requestAnimationFrame(animate);
 };
 
 //TODO
-// Fix these "phantom potions" - DONE
-// Tighten potion spread 
-// Add potion caught tracker and potion dropped tracker
-// Change potion fall speed based on potion caught tracker
+// [X] Fix these "phantom potions"
+// [X] Add collision detection
+// [X] Get potion to reset when collision detected 
+// [X] Add potion caught tracker and potion dropped tracker
+// [ ] Change potion fall speed based on potion caught tracker
+// [X] Fix potions spawning on the far edges, making it hard to see them
+// [X] Tighten potion spread 
+// [X] Make is so that user cant move player sprite out of bounds of canvas
+// [ ] Add GAME OVER functionality
