@@ -161,7 +161,7 @@ function initPotions() {
 }
 
 // Initialize game score and game lives
-let gameScore = 10;
+let gameScore = 0;
 let gameLives = 3;
 
 
@@ -232,7 +232,7 @@ function animate() {
 // [X] Add collision detection
 // [X] Get potion to reset when collision detected 
 // [X] Add potion caught tracker and potion dropped tracker
-// [ ] Change potion fall speed based on potion caught tracker
+// [X] Change potion fall speed based on potion caught tracker
 // [X] Fix potions spawning on the far edges, making it hard to see them
 // [X] Tighten potion spread 
 // [X] Make is so that user cant move player sprite out of bounds of canvas
