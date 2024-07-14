@@ -1,13 +1,10 @@
 // Constants
 const CANVAS_WIDTH = 600;
 const CANVAS_HEIGHT = 800;
-
 const SPAWN_BOUNDARY_LEFT = 10;
 const SPAWN_BOUNDARY_RIGHT = 590;
-
 const PLAYER_BOUNDARY_LEFT = 0;
 const PLAYER_BOUNDARY_RIGHT = 530;
-
 const playerSpriteWidth = 32;
 const playerSpriteHeight = 32;
 const staggerFrames = 12;
@@ -17,6 +14,9 @@ const potionSpriteSheetCols = 10;
 const potionSpriteSheetRows = 16;
 const maxPotions = 1
 const potionInterval = 100;
+const speedIncrementInterval = 5000;
+
+let potionFallSpeed = 2;
 
 // Canvas setup
 const canvas = document.getElementById('canvas');
@@ -129,7 +129,7 @@ class Potion {
         this.height = 32;
         this.spriteX = Math.floor(Math.random() * potionSpriteSheetCols);
         this.spriteY = Math.floor(Math.random() * potionSpriteSheetRows);
-        this.speed = 2;
+        this.speed = potionFallSpeed;
     }
 
     draw() {
@@ -148,9 +148,6 @@ class Potion {
 
     update() {
         this.y += this.speed;
-        if (this.y > CANVAS_HEIGHT) {
-            this.reset();
-        }
     }
 }
 
@@ -161,14 +158,14 @@ function initPotions() {
 }
 
 // Initialize game score and game lives
-let gameScore = 10;
+let gameScore = 0;
 let gameLives = 3;
-
+let lastSpeedIncrementTime = Date.now();
 
 // Game animation loop
 function animate() {
     ctx.clearRect(0, 0, CANVAS_WIDTH, CANVAS_HEIGHT);
-
+    
     var gameOver = false;
 
     // Show score and lives in top right
@@ -185,72 +182,52 @@ function animate() {
     let frameX = playerSpriteWidth * position;
     let frameY = playerSpriteAnimations[playerState].loc[position].y;
     ctx.drawImage(playerImage, frameX, frameY, playerSpriteWidth, playerSpriteHeight, xPlayer, yPlayer, 86, 86)
-    playerHitbox = {x: xPlayer + 6, y: yPlayer + 6, width: 75, height: 86};
+    let playerHitbox = {x: xPlayer + 6, y: yPlayer + 6, width: 75, height: 86};
+
+    // Debug: Draw player hitbox
+    ctx.strokeStyle = 'red';
+    ctx.strokeRect(playerHitbox.x, playerHitbox.y, playerHitbox.width, playerHitbox.height);
 
     // Update and draw potions
     potions.forEach((potion) => {
         potion.update();
         potion.draw();
-        potionHitbox = {x: potion.x, y: potion.y, width: potion.width, height: potion.height};
+        let potionHitbox = {x: potion.x, y: potion.y, width: potion.width, height: potion.height};
 
-        // // Collision detection with a less efficient method. Testing to see if the game speed increase will work with this
-        // if (playerHitbox.x < potionHitbox.x + potionHitbox.width && 
-        //     playerHitbox.x + playerHitbox.width > potionHitbox.x && 
-        //     playerHitbox.y < potionHitbox.y + potionHitbox.height && 
-        //     playerHitbox.y + playerHitbox.height > potionHitbox.y
-        // ){
-        //     // collision detected
-        //     potion.reset();
-        //     gameScore++;
-        //     console.log("Collision detected: Score updated");
-        //     console.log(gameScore);
-        // } else {
-        //     // no collision
-        //     if (potion.y >= CANVAS_HEIGHT) {
-        //         potion.reset();
-        //         gameLives--;
-        //         console.log("Potion missed: Lost a life");
-        //         console.log(gameLives);
-        //     }
-        // }
+        // Debug: Draw potion hitbox
+        ctx.strokeStyle = 'blue';
+        ctx.strokeRect(potionHitbox.x, potionHitbox.y, potionHitbox.width, potionHitbox.height);
 
-        // Collision detection with more efficient method
-        if (playerHitbox.x > potionHitbox.x + potionHitbox.width || 
-            playerHitbox.x + playerHitbox.width < potionHitbox.x || 
-            playerHitbox.y > potionHitbox.y + potionHitbox.height || 
-            playerHitbox.y + playerHitbox.height < potionHitbox.y
+        // Collision detection with less efficient method
+        if (playerHitbox.x < potionHitbox.x + potionHitbox.width && 
+            playerHitbox.x + playerHitbox.width > potionHitbox.x && 
+            playerHitbox.y < potionHitbox.y + potionHitbox.height && 
+            playerHitbox.y + playerHitbox.height > potionHitbox.y
         ){
-        if (potion.y >= CANVAS_HEIGHT) {
-            gameLives --;
             potion.reset();
-            console.log("Potion missed: Lost a life");
-            console.log(gameLives);
-        }
-        } else {
-            potion.reset();
-            console.log("Collision detected: Score updated");
             gameScore ++;
-            console.log(gameScore);
+            console.log("Collision detected: Score updated");
+            console.log("Score: " + gameScore);
+        } else if (potion.y >= CANVAS_HEIGHT) {
+            potion.reset();
+            gameLives --;
+            console.log("Potion missed: Lost a life");
+            console.log("Lives: " + gameLives);
         };
+    });
 
-    // This current way of increasing potion fall speed to increase difficulty is clunky and stupid, but it works
-    // EDIT: gameLives wont update with this block of code included. Figure out why
-    // Maybe try increasing game speed by using intervals instead of all this? Idk, will look at later
-        // if (gameScore >= 75) {
-        //     potion.speed = 6.1;
-        // } else if (gameScore >= 50) {
-        //     potion.speed = 5.5;
-        // } else if (gameScore >= 25) {
-        //     potion.speed = 5;
-        // } else if (gameScore >= 10) {
-        //     potion.speed = 3.5;
-        // }
+    // Increment on potion fall speed based on elapsed time
+    if (Date.now() - lastSpeedIncrementTime >= speedIncrementInterval) {
+        potionFallSpeed += 0.3;
+        lastSpeedIncrementTime = Date.now();
+        console.log("Potion speed increased: " + potionFallSpeed);
+    }
 
     // Check to make sure lives are greater than zero, if not, game over
     if (gameLives < 0) {
         gameOver = true;
     }
-});
+
     playerBounds();
     gameFrame++;
 
@@ -266,7 +243,7 @@ function animate() {
 // [X] Add collision detection
 // [X] Get potion to reset when collision detected 
 // [X] Add potion caught tracker and potion dropped tracker
-// [X] Change potion fall speed based on potion caught tracker
+// [ ] Change potion fall speed based on potion caught tracker
 // [X] Fix potions spawning on the far edges, making it hard to see them
 // [X] Tighten potion spread 
 // [X] Make is so that user cant move player sprite out of bounds of canvas

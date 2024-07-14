@@ -68,6 +68,8 @@ def login():
         password = request.form.get("password")
         csrf_token_clientside = request.form.get("csrf_token")
 
+        print(session['csrf_token']);
+
         # Validate form inputs for non-empty values
         if not username or not password:
             flash('Please enter both username and password')
