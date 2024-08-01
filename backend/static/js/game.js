@@ -243,9 +243,10 @@ function animate() {
 // [X] Add collision detection
 // [X] Get potion to reset when collision detected 
 // [X] Add potion caught tracker and potion dropped tracker
-// [ ] Change potion fall speed based on potion caught tracker
+// [X] Change potion fall speed based on elapsed time
 // [X] Fix potions spawning on the far edges, making it hard to see them
 // [X] Tighten potion spread 
 // [X] Make is so that user cant move player sprite out of bounds of canvas
 // [X] Add GAME OVER functionality
 // [ ] Make some sort of game over screen that appears, then have the user hit enter to play again
+// [ ] Track high scores and send new high scores to database for specific user

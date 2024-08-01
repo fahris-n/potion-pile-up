@@ -34,7 +34,7 @@ def is_username_valid(username):
         return False
     return True
 
-# Create password checker function
+# Create password checker function using regex 
 def is_valid_password(password):
     pattern = r"^(?=.{8,20}$)(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*#?&]).*"
     return bool(re.match(pattern, password))

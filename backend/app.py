@@ -44,6 +44,7 @@ def before_request():
     if 'csrf_token' not in session:
         session['csrf_token'] = secrets.token_hex(16)
 
+
 # Ensure responses are not cached to avoid serving stale data
 @app.after_request
 def after_request(response):
@@ -67,8 +68,6 @@ def login():
         username = request.form.get("username")
         password = request.form.get("password")
         csrf_token_clientside = request.form.get("csrf_token")
-
-        print(session['csrf_token']);
 
         # Validate form inputs for non-empty values
         if not username or not password:
@@ -105,7 +104,6 @@ def login():
 def logout():
     # Clear the session to log the user out
     session.clear()
-
     # Redirect user to logged out form
     return render_template("logout.html")
 
