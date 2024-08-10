@@ -171,7 +171,7 @@ let lastSpeedIncrementTime = Date.now();
 function animate() {
     ctx.clearRect(0, 0, CANVAS_WIDTH, CANVAS_HEIGHT);
     
-    var gameOver = false;
+    //var gameOver = false;
 
     // Show score and lives in top right
     ctx.font = "22px Arial";
@@ -229,22 +229,41 @@ function animate() {
         console.log("Potion speed increased: " + potionFallSpeed);
     }
 
-    // Check to make sure lives are greater than zero, if not, game over
     if (gameLives < 0) {
-        gameOver = true;
+		gameOver();
+		return; 
     }
 
+	// Call playerBounds to make sure user cant move their sprite off screen
     playerBounds();
+	// Increment on gameFrame to do something with the animations, I forget but I think its something to do with the scaling of the animation speed
     gameFrame++;
+	
+	requestAnimationFrame(animate);
 
-    if (!gameOver) {
-        requestAnimationFrame(animate);
-    } else {
-        console.log("Game Over");
-    }
+	// OLD WAY OF HANDLING GAME OVER STATE, NEW WAY WITH ITS OWN FUNCTION IS BETTER
+    //if (!gameOver) {
+    //    requestAnimationFrame(animate);
+    //} else {
+    //    console.log("Game Over");
+    //}
+};
+
+// Game over function
+function gameOver() {
+	isGameOver = true;
+
+	// Draw transparent red rectangle over frozen game in game over state
+	ctx.fillStyle = 'rgba(255, 0, 0, 0.25)';
+	ctx.fillRect(0, 0, CANVAS_WIDTH, CANVAS_HEIGHT);
+	console.log("Red rectangle filled"); 
+	
+	// Display ' Game Over ' message
+
 };
 
 //TODO
+//CHAGNE BACK TO MORE EFFICIENT METHOD FOR THE HITBOX, I DONT THINK THE MORE EFFICIENT METHOD WAS THE REASON FOR THE LIFE TRACKING BUG, SO GO BACK TO IT 
 // [X] Fix these "phantom potions"
 // [X] Add collision detection
 // [X] Get potion to reset when collision detected 
@@ -255,6 +274,6 @@ function animate() {
 // [X] Make is so that user cant move player sprite out of bounds of canvas
 // [X] Add GAME OVER functionality
 // [ ] Make some sort of game over screen that appears, then have the user hit enter to play again
-// 		[ ] When gameOver = true, place a red color film over the game
+// 		[X] When gameOver = true, place a red color film over the game
 // 		[ ] Have the user hit enter or something to reload that game from a default setting 
 // [ ] Track high scores and send new high scores to database for specific user
