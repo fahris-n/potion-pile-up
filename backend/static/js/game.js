@@ -34,6 +34,8 @@ let vxr = 0;
 let vxl = 0;
 let gameFrame = 0;
 const playerSpriteAnimations = [];
+
+// Setting player animation states
 const playerAnimationStates = [
     {
         name: 'moveLeft',
@@ -59,6 +61,7 @@ function createPlayerSpriteAnimations(){
         playerSpriteAnimations[state.name] = frames;
     });
 }
+
 // Initialize sprite animations
 createPlayerSpriteAnimations();
 
@@ -91,6 +94,7 @@ function setupEventListeners(){
         if (e.code == "KeyA") vxl = 0;
     });
 }
+
 // Initialize event listeners
 setupEventListeners();
 
@@ -108,6 +112,7 @@ potionSpritesheet.onload = () => {
         animate();
     }
 };
+
 playerImage.onload = () => {
     imagesLoaded++;
     if (imagesLoaded === 2) {
@@ -178,6 +183,7 @@ function animate() {
     xPlayer += vxl;
 
     // Update and draw character sprite
+	// These 'magic numbers' being added to the player hitbox are just to tune the hitbox, they aren't special besides that
     let position = Math.floor(gameFrame/staggerFrames) % playerSpriteAnimations[playerState].loc.length;
     let frameX = playerSpriteWidth * position;
     let frameY = playerSpriteAnimations[playerState].loc[position].y;
@@ -249,4 +255,6 @@ function animate() {
 // [X] Make is so that user cant move player sprite out of bounds of canvas
 // [X] Add GAME OVER functionality
 // [ ] Make some sort of game over screen that appears, then have the user hit enter to play again
+// 		[ ] When gameOver = true, place a red color film over the game
+// 		[ ] Have the user hit enter or something to reload that game from a default setting 
 // [ ] Track high scores and send new high scores to database for specific user
