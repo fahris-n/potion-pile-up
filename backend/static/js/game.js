@@ -233,33 +233,53 @@ function animate() {
 		gameOver();
 		return; 
     }
-
 	// Call playerBounds to make sure user cant move their sprite off screen
     playerBounds();
 	// Increment on gameFrame to do something with the animations, I forget but I think its something to do with the scaling of the animation speed
     gameFrame++;
-	
+	// Animate frame by frame to run game 	
 	requestAnimationFrame(animate);
-
-	// OLD WAY OF HANDLING GAME OVER STATE, NEW WAY WITH ITS OWN FUNCTION IS BETTER
-    //if (!gameOver) {
-    //    requestAnimationFrame(animate);
-    //} else {
-    //    console.log("Game Over");
-    //}
 };
 
 // Game over function
 function gameOver() {
 	isGameOver = true;
 
+	// Send score data to flask app using fetch API  
+	fetch('/recieved_score', {
+		method: 'POST',
+		headers: {
+			'Content-Type': 'application/json'
+		},
+		body: JSON.stringify({score: gameScore })
+	})
+	.then(response => response.json())
+	.then(data => {
+		// Handle the JSON data
+		console.log('Data sent successfully to Flask server: ', data);
+	})
+		// Handle any errors that occured during the fetch 
+	.catch((error) => {
+		console.error('Error:', error);
+	});
+
 	// Draw transparent red rectangle over frozen game in game over state
 	ctx.fillStyle = 'rgba(255, 0, 0, 0.25)';
 	ctx.fillRect(0, 0, CANVAS_WIDTH, CANVAS_HEIGHT);
-	console.log("Red rectangle filled"); 
-	
-	// Display ' Game Over ' message
+	console.log("Game Over"); 
+	console.log("Total Score:", gameScore);
 
+	// Display ' Game Over ' message
+	ctx.font = '24px arial';
+	ctx.fillStyle = 'white';
+	ctx.fillText("Game Over! Press <Enter> to replay", 110, 400);
+
+	// Add eventlistener for the user to hit the enter key at game over screen. Reload the window to reset that game and variables back to their default  
+    document.addEventListener("keydown", function(e){
+        if (e.code == "Enter"){
+			window.location.reload();
+        }
+	});
 };
 
 //TODO
@@ -273,7 +293,9 @@ function gameOver() {
 // [X] Tighten potion spread 
 // [X] Make is so that user cant move player sprite out of bounds of canvas
 // [X] Add GAME OVER functionality
-// [ ] Make some sort of game over screen that appears, then have the user hit enter to play again
+// [X] Make some sort of game over screen that appears, then have the user hit enter to play again
 // 		[X] When gameOver = true, place a red color film over the game
-// 		[ ] Have the user hit enter or something to reload that game from a default setting 
-// [ ] Track high scores and send new high scores to database for specific user
+// 		[X] Have the user hit enter or something to reload that game from a default setting 
+// [ ] Track high scores and send new high scores to database for specific user. Pretty sure we use AJAX for this
+// [ ] Make audio better, ie making music stop when the game is over and play a game over noise, have music
+// 	   start back up when game is replayed

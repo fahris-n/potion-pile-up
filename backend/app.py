@@ -1,6 +1,7 @@
 import os
+import json 
 from datetime import datetime, timedelta
-from flask import Flask, flash, redirect, render_template, request, session
+from flask import Flask, flash, redirect, render_template, request, session, jsonify
 from flask_session import Session
 from werkzeug.security import check_password_hash, generate_password_hash
 import secrets
@@ -207,6 +208,15 @@ def admin():
         flash("Admin permissions not found")
         return redirect("/")
 
+
+# Route for handling high score data from the game.js file 
+@app.route("/recieved_score", methods=['POST'])
+def recieved_score():
+    data = request.json
+    score = data['score']
+    print(f"Recieved data: {score}")
+    return jsonify({'status': 'success', 'recieved_score': score})
+    
 
 # Run the application in debug mode
 if __name__ == "__main__":
