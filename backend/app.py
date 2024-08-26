@@ -209,7 +209,7 @@ def admin():
         return redirect("/")
 
 
-# Route for handling high score data from the game.js file 
+# Route for handling high score json data from the client-side game.js file 
 @app.route("/recieved_score", methods=['POST'])
 def recieved_score():
     data = request.json

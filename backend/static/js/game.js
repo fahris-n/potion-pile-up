@@ -17,6 +17,7 @@ const potionInterval = 100;
 const speedIncrementInterval = 5000;
 
 let potionFallSpeed = 2;
+let isGameOver = false;
 
 // Canvas setup
 const canvas = document.getElementById('canvas');
@@ -171,7 +172,8 @@ let lastSpeedIncrementTime = Date.now();
 function animate() {
     ctx.clearRect(0, 0, CANVAS_WIDTH, CANVAS_HEIGHT);
     
-    //var gameOver = false;
+	var potion_collected_audio = new Audio('static/media/collect_point.mp3');
+	potion_collected_audio.volume = 0.3;
 
     // Show score and lives in top right
     ctx.font = "22px Arial";
@@ -191,8 +193,8 @@ function animate() {
     let playerHitbox = {x: xPlayer + 6, y: yPlayer + 6, width: 75, height: 86};
 
     // Debug: Draw player hitbox
-    ctx.strokeStyle = 'red';
-    ctx.strokeRect(playerHitbox.x, playerHitbox.y, playerHitbox.width, playerHitbox.height);
+    //ctx.strokeStyle = 'red';
+    //ctx.strokeRect(playerHitbox.x, playerHitbox.y, playerHitbox.width, playerHitbox.height);
 
     // Update and draw potions
     potions.forEach((potion) => {
@@ -201,8 +203,8 @@ function animate() {
         let potionHitbox = {x: potion.x, y: potion.y, width: potion.width, height: potion.height};
 
         // Debug: Draw potion hitbox
-        ctx.strokeStyle = 'blue';
-        ctx.strokeRect(potionHitbox.x, potionHitbox.y, potionHitbox.width, potionHitbox.height);
+        //ctx.strokeStyle = 'blue';
+        //ctx.strokeRect(potionHitbox.x, potionHitbox.y, potionHitbox.width, potionHitbox.height);
 
         // Collision detection with less efficient method
         if (playerHitbox.x < potionHitbox.x + potionHitbox.width && 
@@ -210,6 +212,7 @@ function animate() {
             playerHitbox.y < potionHitbox.y + potionHitbox.height && 
             playerHitbox.y + playerHitbox.height > potionHitbox.y
         ){
+			potion_collected_audio.play();
             potion.reset();
             gameScore ++;
             console.log("Collision detected: Score updated");
@@ -243,25 +246,11 @@ function animate() {
 
 // Game over function
 function gameOver() {
+	var game_over_sound_effect = new Audio('static/media/game_over_sound.mp3');
 	isGameOver = true;
+	game_over_sound_effect.play();
 
-	// Send score data to flask app using fetch API  
-	fetch('/recieved_score', {
-		method: 'POST',
-		headers: {
-			'Content-Type': 'application/json'
-		},
-		body: JSON.stringify({score: gameScore })
-	})
-	.then(response => response.json())
-	.then(data => {
-		// Handle the JSON data
-		console.log('Data sent successfully to Flask server: ', data);
-	})
-		// Handle any errors that occured during the fetch 
-	.catch((error) => {
-		console.error('Error:', error);
-	});
+	sendHighScoreData('/recieved_score');
 
 	// Draw transparent red rectangle over frozen game in game over state
 	ctx.fillStyle = 'rgba(255, 0, 0, 0.25)';
@@ -282,6 +271,26 @@ function gameOver() {
 	});
 };
 
+// Send data to flask endpoint using fetch API  
+function sendHighScoreData(path) {
+	fetch(path, {
+		method: 'POST',
+		headers: {
+			'Content-Type': 'application/json'
+		},
+		body: JSON.stringify({score: gameScore })
+	})
+	.then(response => response.json())
+	.then(data => {
+		// Handle the JSON data
+		console.log('Data sent successfully to Flask server: ', data);
+	})
+		// Handle any errors that occured during the fetch 
+	.catch((error) => {
+		console.error('Error:', error);
+	});
+}
+
 //TODO
 //CHAGNE BACK TO MORE EFFICIENT METHOD FOR THE HITBOX, I DONT THINK THE MORE EFFICIENT METHOD WAS THE REASON FOR THE LIFE TRACKING BUG, SO GO BACK TO IT 
 // [X] Fix these "phantom potions"
@@ -296,6 +305,4 @@ function gameOver() {
 // [X] Make some sort of game over screen that appears, then have the user hit enter to play again
 // 		[X] When gameOver = true, place a red color film over the game
 // 		[X] Have the user hit enter or something to reload that game from a default setting 
-// [ ] Track high scores and send new high scores to database for specific user. Pretty sure we use AJAX for this
-// [ ] Make audio better, ie making music stop when the game is over and play a game over noise, have music
-// 	   start back up when game is replayed
+// [X] Track high scores and send new high scores to database for specific user. Pretty sure we use AJAX for this
