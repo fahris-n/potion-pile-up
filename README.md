@@ -45,6 +45,12 @@ If you have the necessary credentials, follow these steps to set up the app loca
 
 6. Access the webapp at http://127.0.0.1:5000
 
-# Limitations
+## Limitations
+- **The app cannot be run locally without access to the private database URI and secret key.
+- **Please contact the repository owner for access to these credentials or consider deploying the app on a public server where it can be accessed remotely.
 
+## Contributing
+Feel free to fork this project, create pull requests, or open issues if you find bugs or have ideas for new features. However, please be aware that access to the app's private database is required to run the app locally.
 
+## License
+This project is open-source and available under the MIT License
