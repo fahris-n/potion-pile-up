@@ -18,6 +18,33 @@ To run this application locally, you would need:
 If you have the necessary credentials, follow these steps to set up the app locally:
 
 1. Clone this repository:
+   
    ```bash
    git clone https://github.com/fahris-n/potion-pile-up.git
+
+2. Naviagte to the project directory:
+
+   ```bash
+   cd potion-pile-up
+
+3. Create a .env file in the root directory and add the following environment variables
+
+   ```bash
+   DATABASE_URI=your_database_uri_here
+   SECRET_KEY=your_secret_key_here
+
+4. Install the required Python packages
+
+   ```bash
+   pip install -r requirements.txt
+
+5. Run the flask app
+
+   ```bash
+   flask run
+
+6. Access the webapp at http://127.0.0.1:5000
+
+# Limitations
+
 
